@@ -13,6 +13,7 @@ class Roo::Google < Roo::Base
   def initialize(spreadsheet_key, options = {})
     @filename     = spreadsheet_key
     @access_token = options[:access_token] || ENV['GOOGLE_TOKEN']
+    @session      = options[:session]
     super
     @cell      = Hash.new { |h, k| h[k] = Hash.new }
     @cell_type = Hash.new { |h, k| h[k] = Hash.new }
