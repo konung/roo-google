@@ -173,25 +173,28 @@ class Roo::Google < Roo::Base
 
   def read_cell_row(sheet, ws, row, col)
     key                    = "#{row},#{col}"
-    string_value           = ws.input_value(row, col) # item['inputvalue'] ||  item['inputValue']
-    numeric_value          = ws[row, col] # item['numericvalue']  ||  item['numericValue']
-    (value, value_type)    = determine_datatype(string_value, numeric_value)
+    formatted_value        = ws[row, col]
+    input_value            = ws.input_value(row, col) # item['inputvalue'] ||  item['inputValue']
+    numeric_value          = ws.numeric_value(row, col) # item['numericvalue']  ||  item['numericValue']
+    (value, value_type)    = determine_datatype(input_value, formatted_value, numeric_value)
     @cell[sheet][key]      = value unless value == '' || value.nil?
     @cell_type[sheet][key] = value_type
     @formula[sheet]        = {} unless @formula[sheet]
     @formula[sheet][key]   = string_value if value_type == :formula
   end
 
-  def determine_datatype(val, numval = nil)
+  def determine_datatype(val, formatted, numval = nil)
     if val.nil? || val[0, 1] == '='
       ty  = :formula
-      val = numeric?(numval) ? numval.to_f : numval
+      val = numval || formatted
     else
       case
-      when datetime?(val)
+      when datetime?(formatted)
         ty = :datetime
+        val = formatted
       when date?(val)
         ty = :date
+        val = formatted
       when numeric?(val)
         ty  = :float
         val = val.to_f
