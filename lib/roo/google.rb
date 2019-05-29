@@ -180,7 +180,7 @@ class Roo::Google < Roo::Base
     @cell[sheet][key]      = value unless value == '' || value.nil?
     @cell_type[sheet][key] = value_type
     @formula[sheet]        = {} unless @formula[sheet]
-    @formula[sheet][key]   = string_value if value_type == :formula
+    @formula[sheet][key]   = input_value if value_type == :formula
   end
 
   def determine_datatype(val, formatted, numval = nil)
