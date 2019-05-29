@@ -192,7 +192,7 @@ class Roo::Google < Roo::Base
       when datetime?(formatted)
         ty = :datetime
         val = formatted
-      when date?(val)
+      when date?(formatted)
         ty = :date
         val = formatted
       when numeric?(val)
